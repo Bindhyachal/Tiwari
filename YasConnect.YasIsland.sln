@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configration", "Configration", "{8F57F54C-7C9F-4D45-9664-4434D581540A}"
+	ProjectSection(SolutionItems) = preProject
+		gulp-config.js = gulp-config.js
+		publishsettings.targets = publishsettings.targets
+		src\Foundation\Serialization\code\App_Config\Include\zz.Miral.DevSettings.config = src\Foundation\Serialization\code\App_Config\Include\zz.Miral.DevSettings.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Feature", "Feature", "{EF64B0D1-224D-400C-81BB-C701FB35A0FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Foundation", "Foundation", "{929031A0-B493-448D-AFAD-EC6678C05261}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{94FF777A-FEDB-45F0-93D0-7E1B5FCC7D19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YasIsland", "YasIsland", "{CEC092D1-AF5F-4B9C-BDFA-54611178BFAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YasConnect.YasIsland.Website", "src\Project\Yasisland\code\YasConnect.YasIsland.Website.csproj", "{4E00B902-A13F-4347-9D39-EABBCB1C0CDB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E00B902-A13F-4347-9D39-EABBCB1C0CDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E00B902-A13F-4347-9D39-EABBCB1C0CDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E00B902-A13F-4347-9D39-EABBCB1C0CDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E00B902-A13F-4347-9D39-EABBCB1C0CDB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CEC092D1-AF5F-4B9C-BDFA-54611178BFAE} = {94FF777A-FEDB-45F0-93D0-7E1B5FCC7D19}
+		{4E00B902-A13F-4347-9D39-EABBCB1C0CDB} = {CEC092D1-AF5F-4B9C-BDFA-54611178BFAE}
+	EndGlobalSection
+EndGlobal

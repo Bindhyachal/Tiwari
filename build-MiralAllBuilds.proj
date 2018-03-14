@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- 
+  This file is used in two ways.
+    1. Drive the build and publish process
+    2. It is used by the publish process during the build of MySite to configure/extend publish
+        Note: 1. Is kicked off by the use on the cmd line/build server. 2. Is invoked by this script itself.
+              This file is injected into the publish process via the PublishProfile property.
+  -->  
+  
+  <!--	***************************************************************************
+								PropertyGroup
+		***************************************************************************
+  -->
+  
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)'=='' ">14.0</VisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)'=='' ">Release</Configuration>
+    <!-- Location for build output of the project -->
+    <OutputRoot Condition=" '$(OutputRoot)'=='' ">$(MSBuildThisFileDirectory)..\BuildOutput\</OutputRoot>
+    <!-- Root for the publish output -->
+    <B2BPublishFolder Condition=" '$(B2BPublishFolder)'==''">$(bamboo_build_working_directory)\Staging</B2BPublishFolder>  
+    <B2CPublishFolder Condition=" '$(B2CPublishFolder)'==''">$(bamboo_build_working_directory)\Staging</B2CPublishFolder>  
+    <B2CClonePublishFolder Condition=" '$(B2CClonePublishFolder)'==''">$(bamboo_build_working_directory)\Staging</B2CClonePublishFolder> 
+    <PlatformPublishFolder Condition=" '$(PlatformPublishFolder)'==''">$(bamboo_build_working_directory)\Staging</PlatformPublishFolder> 
+    <PlatformB2CPublishFolder Condition=" '$(PlatformB2CPublishFolder)'==''">$(bamboo_build_working_directory)\Staging</PlatformB2CPublishFolder> 	
+    <PlatformOnlyPublishFolder Condition=" '$(PlatformOnlyPublishFolder)'==''">$(bamboo_build_working_directory)\Staging</PlatformOnlyPublishFolder>   	
+    <YasIslandPublishFolder Condition=" '$(YasIslandPublishFolder)'==''">$(bamboo_build_working_directory)\Staging</YasIslandPublishFolder>   	
+	<WebAPIPublishFolder Condition=" '$(WebAPIPublishFolder)'==''">$(bamboo_build_working_directory)\Staging</WebAPIPublishFolder>  
+	<YWWPublishFolder Condition=" '$(YWWPublishFolder)'==''">$(bamboo_build_working_directory)\Staging</YWWPublishFolder>
+  </PropertyGroup>
+
+
+  <!--	***************************************************************************
+								ItemGroup
+		***************************************************************************
+  -->
+
+  <ItemGroup>
+   
+   	<!--	B2B	ProjectsToBuild	-->
+  <B2BProjectsToBuild Include="$(bamboo_build_working_directory)\Miral-Dev\src\Project\B2B\code\YasConnect.B2B.Website.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Feature\B2B\*\code\*.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Feature\B2B\code\*\*.csproj">
+      <AdditionalProperties>
+        VisualStudioVersion=$(VisualStudioVersion);
+        Configuration=$(Configuration);
+       OutputPath=$(OutputRoot);
+        WebPublishMethod=FileSystem;
+        publishUrl=$(B2BPublishFolder)\;
+        DeployOnBuild=true;
+        DeployTarget=WebPublish;
+        PublishProfile=$(MSBuildThisFileFullPath)
+      </AdditionalProperties>
+    </B2BProjectsToBuild>
+    
+	<!--	B2C	ProjectsToBuild	-->	
+    <B2CProjectsToBuild Include="$(bamboo_build_working_directory)\Miral-Dev\src\Project\WBW\code\YasConnect.WBW.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Feature\WBW\**\code\*.csproj">
+      <AdditionalProperties>
+        VisualStudioVersion=$(VisualStudioVersion);
+        Configuration=$(Configuration);
+       OutputPath=$(OutputRoot);
+        WebPublishMethod=FileSystem;
+        publishUrl=$(B2CPublishFolder)\;
+        DeployOnBuild=true;
+        DeployTarget=WebPublish;
+        PublishProfile=$(MSBuildThisFileFullPath)
+      </AdditionalProperties>
+    </B2CProjectsToBuild> 
+
+	<!--	B2C-Clone	ProjectsToBuild	-->	
+	 <B2CCloneProjectsToBuild Include="$(bamboo_build_working_directory)\Miral-Dev\src\Project\WBW\code\YasConnect.WBW.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Feature\WBW\**\code\*.csproj">
+      <AdditionalProperties>
+        VisualStudioVersion=$(VisualStudioVersion);
+        Configuration=$(Configuration);
+       OutputPath=$(OutputRoot);
+        WebPublishMethod=FileSystem;
+        publishUrl=$(B2CClonePublishFolder)\;
+        DeployOnBuild=true;
+        DeployTarget=WebPublish;
+        PublishProfile=$(MSBuildThisFileFullPath)
+      </AdditionalProperties>
+    </B2CCloneProjectsToBuild> 
+	
+	<!--	Platform	ProjectsToBuild	-->	 
+    <PlatformProjectsToBuild Include="$(bamboo_build_working_directory)\Miral-Dev\src\Project\Platform\code\YasConnect.Platform.Website.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Project\WebAPI\code\YasConnect.Platform.WebAPI.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Project\B2B\code\YasConnect.B2B.Website.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Foundation\*\code\*.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Feature\*\*\code\*.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Feature\*\*\code\*.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Feature\*\*\code\*\*.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Project\Yasisland\code\YasConnect.YasIsland.Website.csproj">
+      <AdditionalProperties>
+        VisualStudioVersion=$(VisualStudioVersion);
+        Configuration=$(Configuration);
+       OutputPath=$(OutputRoot);
+        WebPublishMethod=FileSystem;
+        publishUrl=$(PlatformPublishFolder)\;
+        DeployOnBuild=true;
+        DeployTarget=WebPublish;
+        PublishProfile=$(MSBuildThisFileFullPath)
+      </AdditionalProperties>
+    </PlatformProjectsToBuild>
+
+	<!--	Platform-B2C	ProjectsToBuild	-->
+    <PlatformB2CProjectsToBuild Include="$(bamboo_build_working_directory)\Miral-Dev\src\Project\Platform\code\YasConnect.Platform.Website.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Project\WBW\code\YasConnect.WBW.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Foundation\*\code\*.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Feature\Platform\*\code\*.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Feature\WBW\*\code\*.csproj">
+      <AdditionalProperties>
+        VisualStudioVersion=$(VisualStudioVersion);
+        Configuration=$(Configuration);
+       OutputPath=$(OutputRoot);
+        WebPublishMethod=FileSystem;
+        publishUrl=$(PlatformB2CPublishFolder)\;
+        DeployOnBuild=true;
+        DeployTarget=WebPublish;
+        PublishProfile=$(MSBuildThisFileFullPath)
+      </AdditionalProperties>
+    </PlatformB2CProjectsToBuild>
+	
+	<!--	Platform-Only	ProjectsToBuild	-->
+    <PlatformOnlyProjectsToBuild Include="$(bamboo_build_working_directory)\Miral-Dev\src\Project\Platform\code\YasConnect.Platform.Website.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Foundation\*\code\*.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Feature\Platform\*\code\*\*.csproj;$(bamboo_build_working_directory)\Miral-Dev\src\Feature\Platform\*\code\*.csproj">
+      <AdditionalProperties>
+        VisualStudioVersion=$(VisualStudioVersion);
+        Configuration=$(Configuration);
+       OutputPath=$(OutputRoot);
+        WebPublishMethod=FileSystem;
+        publishUrl=$(PlatformOnlyPublishFolder)\;
+        DeployOnBuild=true;
+        DeployTarget=WebPublish;
+        PublishProfile=$(MSBuildThisFileFullPath)
+      </AdditionalProperties>
+    </PlatformOnlyProjectsToBuild>	
+
+	<!--	YasIsland	ProjectsToBuild	-->	
+    <YasIslandProjectsToBuild Include="$(bamboo_build_working_directory)\Miral-Dev\src\Project\Yasisland\code\YasConnect.YasIsland.Website.csproj">
+      <AdditionalProperties>
+        VisualStudioVersion=$(VisualStudioVersion);
+        Configuration=$(Configuration);
+       OutputPath=$(OutputRoot);
+        WebPublishMethod=FileSystem;
+        publishUrl=$(YasIslandPublishFolder)\;
+        DeployOnBuild=true;
+        DeployTarget=WebPublish;
+        PublishProfile=$(MSBuildThisFileFullPath)
+      </AdditionalProperties>
+    </YasIslandProjectsToBuild> 
+	
+	<!--  WebAPI Projectto Build -->
+	
+	  <WebAPIProjectsToBuild Include="$(bamboo_build_working_directory)\Miral-Dev\src\Project\WebAPI\code\*.csproj">
+      <AdditionalProperties>
+        VisualStudioVersion=$(VisualStudioVersion);
+        Configuration=$(Configuration);
+       OutputPath=$(OutputRoot);
+        WebPublishMethod=FileSystem;
+        publishUrl=$(YasIslandPublishFolder)\;
+        DeployOnBuild=true;
+        DeployTarget=WebPublish;
+        PublishProfile=$(MSBuildThisFileFullPath)
+      </AdditionalProperties>
+    </WebAPIProjectsToBuild> 
+	
+	<!-- YWW Project to Build -->
+	
+	    <YWWProjectsToBuild Include="$(bamboo_build_working_directory)\Miral-Dev\src\Project\YWW\**\code\*.csproj">
+      <AdditionalProperties>
+        VisualStudioVersion=$(VisualStudioVersion);
+        Configuration=$(Configuration);
+        OutputPath=$(OutputRoot);
+       WebPublishMethod=FileSystem;
+        publishUrl=$(PublishFolder)\;
+        DeployOnBuild=true;
+        DeployTarget=WebPublish;
+        PublishProfile=$(MSBuildThisFileFullPath)
+      </AdditionalProperties>
+    </YWWProjectsToBuild>
+  </ItemGroup>
+	
+  
+
+  <!--	***************************************************************************
+								TARGETS Declaration
+		***************************************************************************
+  -->
+  
+	<!--	B2B	-->  
+	<Target Name="BuildB2B">
+    <MSBuild Projects="@(B2BProjectsToBuild)" />
+    <OnError ExecuteTargets="OnBuildB2BProjectError" />
+	</Target>
+
+	<Target Name="OnBuildB2BProjectError" >
+     <Error Text="Error building Projects: [@(B2BProjectsToBuild)]" />             
+	</Target>
+  
+	<!--	B2C	-->  
+    <Target Name="BuildB2C">
+    <MSBuild Projects="@(B2CProjectsToBuild)" />
+    <OnError ExecuteTargets="OnBuildB2CProjectError" />
+    </Target>
+
+	<Target Name="OnBuildB2CProjectError" >
+     <Error Text="Error building Projects: [@(B2CProjectsToBuild)]" />             
+	</Target>
+
+
+	<!--	B2C-Clone	-->	
+	<Target Name="BuildB2CClone">
+    <MSBuild Projects="@(B2CCloneProjectsToBuild)" />
+    <OnError ExecuteTargets="OnBuildB2CCloneProjectError" />
+	</Target>
+
+	<Target Name="OnBuildB2CCloneProjectError" >
+     <Error Text="Error building Projects: [@(B2CCloneProjectsToBuild)]" />             
+	</Target>
+
+	<!--	Platform	-->
+  	<Target Name="BuildPlatform">
+    <MSBuild Projects="@(PlatformProjectsToBuild)" />
+    <OnError ExecuteTargets="OnBuildPlatformProjectError" />
+	</Target>
+
+	<Target Name="OnBuildPlatformProjectError" >
+     <Error Text="Error building Projects: [@(PlatformProjectsToBuild)]" />             
+	</Target>	
+	
+	<!--	Platform-B2C	-->
+    <Target Name="BuildPlatformB2C">
+    <MSBuild Projects="@(PlatformB2CProjectsToBuild)" />
+    <OnError ExecuteTargets="OnBuildPlatformB2CProjectError" />
+	</Target>
+
+	<Target Name="OnBuildPlatformB2CProjectError" >
+     <Error Text="Error building Projects: [@(PlatformB2CProjectsToBuild)]" />             
+	</Target>		
+
+	<!--	Platform-only	-->
+    <Target Name="BuildPlatformOnly">
+    <MSBuild Projects="@(PlatformOnlyProjectsToBuild)" />
+    <OnError ExecuteTargets="OnBuildPlatformOnlyProjectError" />
+	</Target>
+
+	<Target Name="OnBuildPlatformOnlyProjectError" >
+     <Error Text="Error building Projects: [@(PlatformOnlyProjectsToBuild)]" />             
+	</Target>	
+
+	<!--	YasIsland	-->
+    <Target Name="BuildYasIsland">
+    <MSBuild Projects="@(YasIslandProjectsToBuild)" />
+    <OnError ExecuteTargets="OnBuildYasIslandProjectError" />
+	</Target>
+
+	<Target Name="OnBuildYasIslandProjectError" >
+     <Error Text="Error building Projects: [@(YasIslandProjectsToBuild)]" />             
+	</Target>	
+	
+	
+	<!--	WebAPI	-->
+    <Target Name="BuildWebAPI">
+    <MSBuild Projects="@(WebAPIProjectsToBuild)" />
+    <OnError ExecuteTargets="OnBuildWebAPIProjectError" />
+	</Target>
+
+	<Target Name="OnBuildWebAPIProjectError" >
+     <Error Text="Error building Projects: [@(WebAPIProjectsToBuild)]" />             
+	</Target>	
+	
+		<!--	YWW	-->
+    <Target Name="BuildYWW">
+    <MSBuild Projects="@(YWWProjectsToBuild)" />
+    <OnError ExecuteTargets="OnBuildYWWProjectError" />
+	</Target>
+
+	<Target Name="OnBuildYWWProjectError" >
+     <Error Text="Error building Projects: [@(YWWProjectsToBuild)]" />             
+	</Target>	
+	
+  <!-- ***************************************************************************************
+The targets below will be called during the publish process.
+These targets are injected into the publish process for each web project.
+These targets will not have access to any new values for properties/items from
+the targets above this.
+*************************************************************************************** -->
+
+  <Target Name="AfterWebPublish" AfterTargets="WebPublish">
+    <Message Text="Inside AfterWebPublish" Importance="high"/>
+  </Target>
+  
+</Project>
+

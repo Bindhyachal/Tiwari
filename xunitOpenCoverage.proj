@@ -1,0 +1,102 @@
+<Project
+    DefaultTargets="TestOpenCoverage"
+    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <PropertyGroup>
+		<VSTESTPath>"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"</VSTESTPath>
+
+	<TestCovDir>$(bamboo_build_working_directory)\Miral-Dev\TestResults</TestCovDir>
+
+ </PropertyGroup>
+
+ <ItemGroup>
+
+       <TestAssemblies Exclude="$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Foundation.SitecoreExtensions.Tests.dll;
+			        $(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Foundation.Testing.dll;
+				$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Foundation.ReactFramework.Tests.dll;
+				$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Foundation.ProductSync.Tests.dll;
+				$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Foundation.MultiTenant.Tests.dll;
+				$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Foundation.Dictionary.Tests.dll;
+				$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Foundation.Core.Tests.dll;
+				$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Foundation.Base.Tests.dll;
+				$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Feature.Platform.YouTubeVideo.Tests.dll;
+				$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Feature.Platform.TextWithCTA.Test.dll;
+				$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Feature.Platform.TabsListing.Test.dll;
+				$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Feature.Platform.RichMedia.Test.dll;
+				$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\Yasconnect.Feature.Platform.Footer.Tests.dll;
+				$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\Yasconnect.Feature.Platform.HeroPanel.Tests.dll"
+		       Include="$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\*.test*.dll"/>
+
+<!-- 	  <TestAssemblies Include="$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\*.test*.dll"
+			  Exclude="$(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Foundation.SitecoreExtensions.Tests.dll;
+			        $(bamboo_build_working_directory)\Miral-Dev\src\*\**\bin\Release\YasConnect.Foundation.Testing.dll" />-->
+
+        <TestResult Include="**\*.trx"/>
+ </ItemGroup>
+
+
+
+	<!--Working Test -->
+  <Target Name="Test">
+
+    <MakeDir Directories="TestResults" />
+
+	<Exec Command="$(VSTestPath) %(TestAssemblies.Identity) /UseVsixExtensions:true /TestAdapterPath:&quot;$(bamboo_build_working_directory)\Miral-Dev\packages\xunit.runner.visualstudio.2.2.0\build\_common&quot; /Settings:&quot;C:\OpenCoverSettings\output.runsettings&quot; /Logger:trx" ContinueOnError="True"/>
+
+	<Message Text="@(TestResult)"/>
+
+  </Target>
+ 
+
+  <Target Name="TestOpenCoverage" DependsOnTargets="PreCleanup">
+
+	<PropertyGroup>
+
+	<VSPath>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe</VSPath>
+
+	<CoverPath>"C:\Program Files (x86)\OpenCover\OpenCover.Console.exe"</CoverPath>
+
+      <CoverageCommand>"C:\Program Files (x86)\OpenCover\OpenCover.Console.exe" -register:user -target:&quot;$(VSPath)&quot; -targetargs:&quot;%(TestAssemblies.Identity) /UseVsixExtensions:true /TestAdapterPath:&quot;$(bamboo_build_working_directory)\Miral-Dev\packages\xunit.runner.visualstudio.2.2.0\build\_common&quot; /Settings:&quot;C:\OpenCoverSettings\output.runsettings&quot; /Logger:trx&quot; -output:&quot;$(bamboo_build_working_directory)\Miral-Dev\TestResults\codecoveragereport.xml&quot;</CoverageCommand>
+</PropertyGroup>
+ 
+
+    <Message Text="Found test assemblies: %(TestAssemblies.Identity)" />
+
+<!--    <Message Text="Found test assemblies: @(TestAssemblies)" />-->
+	
+   <MakeDir Directories="$(TestCovDir)" />
+
+<!--	<Message Text="Running command $(CoverageCommand)" />-->
+
+
+<Exec Command="$(CoverPath) -register:user -target:$(VSTestPath) -targetargs:&quot;%(TestAssemblies.Identity) /UseVsixExtensions:true /TestAdapterPath:&quot;$(bamboo_build_working_directory)\Miral-Dev\packages\xunit.runner.visualstudio.2.2.0\build\_common&quot; /Settings:&quot;C:\OpenCoverSettings\output.runsettings&quot; /Logger:trx&quot; -filter:&quot;+[*]*&quot; -mergebyhash -output:&quot;$(bamboo_build_working_directory)\Miral-Dev\TestResults\codecoveragereport.xml&quot;"  ContinueOnError="True">
+
+    <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+    </Exec>
+
+    <Message Text="Tests complete." />
+    <Message Text="The exit code is $(ErrorCode)"/>
+    <Error Text="Error while executing VSTest" Condition="'$(ErrorCode)' != '0'" />
+    <OnError ExecuteTargets="MessageErrorHandler"/>
+  </Target>
+ 
+	  <Target Name="MessageErrorHandler">
+	    <Message Text="An error has occurred while executing VSTest"/>
+	  </Target>
+ 
+
+	<Target Name="PreCleanup">
+		<RemoveDir Directories="$(TestCovDir)"/>
+	</Target>
+
+
+<!--      <Exec Command="&quot;c:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe&quot; 
+
+project.json /UseVsixExtensions:true" />-->
+<!--    <xunit Assemblies="@(TestAssemblies)" xml="$(bamboo_build_working_directory)\Miral-Dev\xunitresults.xml" />-->
+
+
+
+
+
+</Project>

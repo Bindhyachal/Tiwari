@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+<PropertyGroup>
+<CommunityTasksPath>$(TasksDir)\Tasks\Community</CommunityTasksPath>
+<AssemblyVersionFile>$(AssemblyDir)\AssemblyInfo.cs</AssemblyVersionFile>
+</PropertyGroup>
+
+  <Import Project="$(CommunityTasksPath)\MSBuild.Community.tasks" />
+  <UsingTask AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.FileUpdate" />
+  
+  <Target Name="SetRevisionNumber">
+    <Message Text="Setting Revision Number to $(BUILDNUMBER) in $(AssemblyVersionFile)" Importance="High" />
+	
+	<FileUpdate Files="$(AssemblyVersionFile)"
+	  Regex="\[assembly: AssemblyVersion\(.(\d+)\.(\d+)\.(\d+)\.(\d+)"
+      ReplacementText="[assembly: AssemblyVersion(&quot;$(BUILDNUMBER)" />
+	  
+	<FileUpdate Files="$(AssemblyVersionFile)"
+	  Regex="\[assembly: AssemblyFileVersion\(.(\d+)\.(\d+)\.(\d+)\.(\d+)"
+      ReplacementText="[assembly: AssemblyFileVersion(&quot;$(BUILDNUMBER)" />
+  </Target>
+</Project>
